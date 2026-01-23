@@ -67,7 +67,6 @@ while [ "$CHOICE -ne 4" ]; do
 
 
         5)  echo "Installing Extras"
-            sudo dnf copr enable zhullyb/v2rayA -y
             sudo dnf copr enable timlau/yumex-ng -y
             sudo dnf install yumex -y
             sudo dnf group install -y --with-optional virtualization
