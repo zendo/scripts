@@ -19,15 +19,14 @@ for dep in dialog curl; do command_exist "$dep" || {
 }; done
 
 OPTIONS=(1 "Debloat System"
-         2 "Speeding Up DNF"
-         3 "Enabling RPM Fusion"
-         4 "Installing Essential Software"
-         5 "Installing Codecs"
-         6 "Installing Extras"
-         7 "Install Nvidia - Install akmod nvidia drivers"
-         8 "Disable SElinux - Reboot need"
-         9 "Enable Terra repo"
-         10 "Quit")
+         2 "Enabling RPM Fusion"
+         3 "Installing Essential Software"
+         4 "Installing Codecs"
+         5 "Installing Extras"
+         6 "Install Nvidia - Install akmod nvidia drivers"
+         7 "Disable SElinux - Reboot need"
+         8 "Enable Terra repo"
+         9 "Quit")
 
 while [ "$CHOICE -ne 4" ]; do
     CHOICE=$(dialog --clear \
@@ -48,32 +47,26 @@ while [ "$CHOICE -ne 4" ]; do
             notify-send "Debloat System" --expire-time=10
             ;;
 
-        2)  echo "Speeding Up DNF"
-            echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-            echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
-            notify-send "Your DNF config has now been amended" --expire-time=10
-            ;;
-
-        3)  echo "Enabling RPM Fusion"
+        2)  echo "Enabling RPM Fusion"
             sudo dnf install -y https://mirrors.ustc.edu.cn/rpmfusion/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.ustc.edu.cn/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
             notify-send "RPM Fusion Enabled" --expire-time=10
             ;;
 
-        4)  echo "Installing Essential Software"
+        3)  echo "Installing Essential Software"
             sudo dnf install -y gnome-tweaks gnome-extensions-app dconf-editor \
                  jetbrains-mono-fonts fira-code-fonts \
                  zsh p7zip-plugins rpmreaper
             notify-send "Software has been installed" --expire-time=10
             ;;
 
-        5)  echo "Installing Codecs"
+        4)  echo "Installing Codecs"
             sudo dnf group upgrade -y --with-optional --allowerasing Multimediar
             # sudo dnf install lame\* --exclude=lame-devel
             notify-send "Codecs has been installed" --expire-time=10
             ;;
 
 
-        6)  echo "Installing Extras"
+        5)  echo "Installing Extras"
             sudo dnf copr enable zhullyb/v2rayA -y
             sudo dnf copr enable timlau/yumex-ng -y
             sudo dnf install yumex -y
@@ -82,23 +75,23 @@ while [ "$CHOICE -ne 4" ]; do
             notify-send "All done" --expire-time=10
             ;;
 
-        7)  echo "Installing Nvidia Driver Akmod-Nvidia"
+        6)  echo "Installing Nvidia Driver Akmod-Nvidia"
             sudo dnf install -y akmod-nvidia
             notify-send "All done" --expire-time=10
             ;;
 
-        8)  echo "Disable SElinux"
+        7)  echo "Disable SElinux"
             sudo sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
             sestatus
             notify-send "All done" --expire-time=10
             ;;
 
-        9) echo "Enable Terra repo"
+        8) echo "Enable Terra repo"
            # https://terra.fyralabs.com/
            sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
            ;;
 
-        10)
+        9)
             exit 0
             ;;
     esac
